@@ -3,6 +3,7 @@ import english from './en'
 export default () => {
   const translations = english().then(messages => {
     const temporary = {...messages}
+    temporary.welcome = 'Bemvindo!'
     temporary.world = 'Mundo'
     temporary.apple = 'Sem maçãs | Um maçã | {count} maçãs'
     temporary.howmany = 'Quantas maçãs você possui'

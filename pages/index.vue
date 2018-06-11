@@ -14,6 +14,17 @@
       <p><span v-html="$tc('apple', count, { count })" /></p>
     </div>
     <div>
+      <h3>From remote</h3>
+      <ul>
+        <li
+          v-for="key in translations"
+          :key="key"
+        >
+          <strong>{{key}}</strong>:&nbsp;<span>{{$t(key)}}</span>
+        </li>
+      </ul>
+    </div>
+    <div>
       <h3>{{ $t('howmany', { what }) }} <button @click="add(what)">{{ $t('add') }}</button></h3>
       <p>{{ $t('ownhowmany') }} <strong>{{ $tc(what, count, { count }) }}</strong></p>
       <p>Count is {{ count }}</p>
@@ -35,13 +46,17 @@ export default {
     return {
       what: 'apple',
       count: 0,
-      dog: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTA'
+      dog: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTA',
+      translations: []
     }
   },
   async asyncData ({ app }) {
     const { data: { message: dog } } = await app.$axios.get('/dog')
+    const translations = await app.$axios.get(`/hpi/translations/en.json`).then(recv => Object.keys(recv.data))
+
     return {
-      dog
+      dog,
+      translations
     }
   },
   methods: {

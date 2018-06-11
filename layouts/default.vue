@@ -34,13 +34,17 @@
 export default {
   methods: {
     switchLocale (localeName) {
-      console.log('switchLocale this.$i18n.getLocaleMessage', this.$i18n.getLocaleMessage(localeName))
+      // mergeLocaleMessage
+      const updated = this.$i18n.getLocaleMessage(localeName)
       const messages = {
-        hello: `Hello in ${localeName}` // WIP!!
+        hello: `Hello in ${localeName}`, // WIP!!
+        ...updated
       }
-      this.$store.dispatch('i18n/setLocale', localeName)
-      this.$store.dispatch('i18n/setMessages', {...messages})
-      console.log('switchLocale', localeName)
+      console.log('experiment: switchLocale this.$i18n.getLocaleMessage', {...messages})
+      this.$set(this.$i18n.messages, localeName, {...messages})
+      // this.$store.dispatch('i18n/setLocale', localeName)
+      // this.$store.dispatch('i18n/setMessages', {...messages})
+      console.log('experiment: switchLocale', localeName)
     }
   }
 }

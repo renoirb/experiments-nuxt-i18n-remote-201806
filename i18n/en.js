@@ -1,10 +1,9 @@
-export default (a) => {
-  console.log('foo', a)
+export default () => {
   const translations = {
+    welcome: 'Welcome!',
     world: 'World (from i18n/en)',
     car: 'car | cars',
     apple: 'No apples | one apple | {count} apples',
-    welcome: 'Welcome!',
     howmany: 'How many {what} do you own',
     ownhowmany: 'You currently own',
     add: 'add',

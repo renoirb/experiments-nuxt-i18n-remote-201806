@@ -24,10 +24,9 @@ module.exports = {
   seo: false,
   parsePages: false,
   langDir: 'i18n/',
+  syncVuex: true,
   vueI18n: {
-    fallbackLocale: 'en'
-  },
-  onLanguageSwitched: (a) => {
-    console.log('onLanguageSwitched', a)
+    fallbackLocale: 'en',
+    silentTranslationWarn: true
   }
 }
