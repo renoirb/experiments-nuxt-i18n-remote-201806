@@ -1,0 +1,11 @@
+{
+  "welcome": "Bienvenue!",
+  "world": "Planète (chargé à partir de i18n/fr)",
+  "car": "auto | autos",
+  "apple": "Pas de pommes | Une pomme | {count} pommes",
+  "howmany": "Combien de {what} possédez-vous",
+  "ownhowmany": "Vous avez présentement",
+  "add": "Ajouter",
+  "cutedog": "Voici un joli pitou",
+  "iown": "Je possède"
+}

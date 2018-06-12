@@ -10,7 +10,7 @@ module.exports = {
       code: 'fr',
       iso: 'fr-CA',
       name: 'Français',
-      file: 'fr.js'
+      file: 'fr.json'
     },
     {
       code: 'pt',
@@ -24,10 +24,9 @@ module.exports = {
     useCookie: false
   },
   lazy: true,
-  seo: false,
-  parsePages: false,
-  langDir: 'i18n/',
   syncVuex: true,
+  seo: false,
+  langDir: 'i18n/',
   vueI18n: {
     fallbackLocale: 'en',
     silentTranslationWarn: true

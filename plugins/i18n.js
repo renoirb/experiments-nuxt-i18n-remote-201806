@@ -8,14 +8,16 @@ export default async function ({ $axios, app }) {
   app.i18n.optionalMessagesMerger = (a) => {
     console.log('optionalMessagesMerger', a)
   }
-  */
   // beforeLanguageSwitch called right before setting a new locale
   app.i18n.beforeLanguageSwitch = (oldLocale, newLocale) => {
     console.log('experiment: beforeLanguageSwitch(oldLocale, newLocale) plugin', oldLocale, newLocale)
   }
-  // onLanguageSwitched called right after a new locale has been set
-  app.i18n.onLanguageSwitched = async (oldLocale, newLocale) => {
+  */
+  // Called right after a new locale has been set
+  // Make sure this is a function, not an arrow () => {}, we loose the this reference
+  app.i18n.onLanguageSwitched = async function (oldLocale, newLocale) {
     // see node_modules/nuxt-i18n/src/templates/middleware.js
+    console.log('onLanguageSwitched', {...app.i18n.messages[newLocale]})
     const normalizedLocaleName = newLocale.toLowerCase()
     const loaded = app.i18n.loadedLanguages
     const messages = {...app.i18n.messages[newLocale]}
