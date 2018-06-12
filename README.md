@@ -1,6 +1,6 @@
 # Experimenting with Nuxt, with nuxt-i18n merging Translations from remote
 
-WIP
+WIP, related to https://github.com/clarkdo/hare/pull/339
 
 # Reference
 

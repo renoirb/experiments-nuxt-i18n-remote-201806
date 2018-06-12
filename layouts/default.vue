@@ -33,18 +33,23 @@
 <script>
 export default {
   methods: {
-    switchLocale (localeName) {
-      // mergeLocaleMessage
-      const updated = this.$i18n.getLocaleMessage(localeName)
+    async switchLocale (localeName) {
+     const normalizedLocaleName = localeName.toLowerCase()
+      const localeMessage = this.$i18n.getLocaleMessage(localeName)
+      console.log('experiment: WIP switchLocale this.$i18n.getLocaleMessage', {...localeMessage})
+      const remoteMessage = await this.$axios.get(`/hpi/translations/${normalizedLocaleName}.json`).then(recv => recv.data)
+      console.log('experiment: WIP switchLocale this.$axios.get(...)', {...remoteMessage})
+
       const messages = {
-        hello: `Hello in ${localeName}`, // WIP!!
-        ...updated
+        hello: `Hello in ${normalizedLocaleName}`, // WIP!!
+        ...localeMessage,
+        ...remoteMessage
       }
-      console.log('experiment: switchLocale this.$i18n.getLocaleMessage', {...messages})
-      this.$set(this.$i18n.messages, localeName, {...messages})
-      // this.$store.dispatch('i18n/setLocale', localeName)
+      console.log('experiment: WIP switchLocale this.$i18n.getLocaleMessage', normalizedLocaleName, {...messages})
+      // this.$set(this.$i18n.messages, normalizedLocaleName, {...messages})
+      this.$i18n.mergeLocaleMessage(normalizedLocaleName, messages)
+      // this.$store.dispatch('i18n/setLocale', normalizedLocaleName)
       // this.$store.dispatch('i18n/setMessages', {...messages})
-      console.log('experiment: switchLocale', localeName)
     }
   }
 }

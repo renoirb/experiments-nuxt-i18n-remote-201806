@@ -1,6 +1,14 @@
 // See https://nuxt-community.github.io/nuxt-i18n/callbacks.html#usage
 export default async function ({ $axios, app }) {
+  /* WIP
   console.log('experiment: plugins/i18n')
+  app.i18n.optionalLanguageGuesser = (context) => {
+    console.log('optionalLanguageGuesser called')
+  }
+  app.i18n.optionalMessagesMerger = (a) => {
+    console.log('optionalMessagesMerger', a)
+  }
+  */
   // beforeLanguageSwitch called right before setting a new locale
   app.i18n.beforeLanguageSwitch = (oldLocale, newLocale) => {
     console.log('experiment: beforeLanguageSwitch(oldLocale, newLocale) plugin', oldLocale, newLocale)

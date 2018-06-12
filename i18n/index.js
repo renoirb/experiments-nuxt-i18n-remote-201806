@@ -20,6 +20,9 @@ module.exports = {
     }
   ],
   defaultLocale: 'en',
+  detectBrowserLanguage: {
+    useCookie: false
+  },
   lazy: true,
   seo: false,
   parsePages: false,

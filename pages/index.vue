@@ -30,10 +30,6 @@
       <p>Count is {{ count }}</p>
     </div>
     <div>
-      <h3>Remotely loaded?</h3>
-      <p><button v-t="'btn_Start'" /></p>
-    </div>
-    <div>
       <h3>{{ $t('cutedog') }}</h3>
       <img :src="dog" />
     </div>
