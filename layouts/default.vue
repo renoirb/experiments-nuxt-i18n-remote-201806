@@ -23,7 +23,6 @@
         {{ locale.name }}
       </button>
     </div>
-
     <section>
       <nuxt />
     </section>

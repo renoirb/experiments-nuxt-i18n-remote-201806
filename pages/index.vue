@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h2>Index</h2>
+    <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
+    <h2>Samples</h2>
     <div>
       <h3>Translating using curly</h3>
       <p>{{ $t('hello') }}</p>
