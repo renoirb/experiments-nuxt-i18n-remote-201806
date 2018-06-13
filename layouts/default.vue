@@ -1,6 +1,9 @@
 <template>
   <div id="root">
     <h1>{{ $t('welcome') }}</h1>
+    <section>
+      <nuxt />
+    </section>
     <div>
       <p>as link</p>
       <nuxt-link
@@ -23,9 +26,6 @@
         {{ locale.name }}
       </button>
     </div>
-    <section>
-      <nuxt />
-    </section>
   </div>
 </template>
 
@@ -33,21 +33,20 @@
 export default {
   methods: {
     async switchLocale (localeName) {
-     const normalizedLocaleName = localeName.toLowerCase()
       const localeMessage = this.$i18n.getLocaleMessage(localeName)
-      console.log('experiment: WIP switchLocale this.$i18n.getLocaleMessage', {...localeMessage})
-      const remoteMessage = await this.$axios.get(`/hpi/translations/${normalizedLocaleName}.json`).then(recv => recv.data)
-      console.log('experiment: WIP switchLocale this.$axios.get(...)', {...remoteMessage})
+      // console.log('experiment: WIP switchLocale this.$i18n.getLocaleMessage', {...localeMessage})
+      const remoteMessage = await this.$axios.get(`/sc/translations/${localeName}.json`).then(recv => recv.data)
+      // console.log('experiment: WIP switchLocale this.$axios.get(...)', {...remoteMessage})
 
       const messages = {
-        hello: `Hello in ${normalizedLocaleName}`, // WIP!!
+        hello: `Hello in ${localeName}`, // WIP!!
         ...localeMessage,
         ...remoteMessage
       }
-      console.log('experiment: WIP switchLocale this.$i18n.getLocaleMessage', normalizedLocaleName, {...messages})
-      // this.$set(this.$i18n.messages, normalizedLocaleName, {...messages})
-      this.$i18n.mergeLocaleMessage(normalizedLocaleName, messages)
-      // this.$store.dispatch('i18n/setLocale', normalizedLocaleName)
+      console.log('experiment: WIP switchLocale', localeName, {...messages})
+      // this.$set(this.$i18n.messages, localeName, {...messages})
+      // this.$i18n.mergeLocaleMessage(localeName, messages)
+      // this.$store.dispatch('i18n/setLocale', localeName)
       // this.$store.dispatch('i18n/setMessages', {...messages})
     }
   }

@@ -2,65 +2,40 @@
   <div>
     <h2>Index</h2>
     <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
-    <h2>Samples</h2>
+    <nuxt-link :to="{path: '/bravo'}">Bravo</nuxt-link>
     <div>
-      <h3>Translating using curly</h3>
-      <p>{{ $t('hello') }}</p>
-      <h3>Translating using v-t attribute</h3>
-      <p v-t="'world'" />
-      <h3>Translating using v-html attribute</h3>
-      <p><span v-html="$t('hello')" /></p>
-      <h3>Translating using v-html attribute, and argument</h3>
-      <p><span v-html="$t('howmany', { what: 'apples' })" />?</p>
-      <p><span v-t="'iown'" />&nbsp;<strong>{{ $tc(what, count, { count }) }}</strong></p>
-      <h3>Translating using v-html attribute, argument and pluralization </h3>
-      <p><span v-html="$tc('apple', count, { count })" /></p>
-    </div>
-    <div>
-      <h3>From remote</h3>
-      <ul>
-        <li
-          v-for="key in translations"
-          :key="key"
-        >
-          <strong>{{key}}</strong>:&nbsp;<span>{{$t(key)}}</span>
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h3>{{ $t('howmany', { what }) }} <button @click="add(what)">{{ $t('add') }}</button></h3>
+      <h3>Using translation formatters</h3>
+      <h4>{{ $t('howmany', { what }) }} <button @click="add(what)">{{ $t('add') }}</button></h4>
       <p>{{ $t('ownhowmany') }} <strong>{{ $tc(what, count, { count }) }}</strong></p>
       <p>Count is {{ count }}</p>
     </div>
     <div>
-      <h3>{{ $t('cutedog') }}</h3>
+      <h4>{{ $t('cutedog') }}</h4>
       <img :src="dog" />
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      what: 'apple',
-      count: 0,
-      dog: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTA',
-      translations: []
+      what: 'apple' // Make part of VueX to experiment about this
     }
   },
-  async asyncData ({ app }) {
-    const { data: { message: dog } } = await app.$axios.get('/dog')
-    const translations = await app.$axios.get(`/hpi/translations/en.json`).then(recv => Object.keys(recv.data))
-
-    return {
-      dog,
-      translations
-    }
+  computed: mapState({
+    count: state => state.count,
+    dog: state => state.dog
+  }),
+  async fetch ({
+    store
+  }) {
+    await store.dispatch('hydrateDog')
   },
   methods: {
-    add (what) {
-      ++this.count
+    async add (what) {
+      await this.$store.dispatch('countPlusOne')
     }
   }
 }

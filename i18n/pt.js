@@ -1,7 +1,7 @@
 import english from './en'
 
 export default () => {
-  const translations = english().then(messages => {
+  const translations = Promise.resolve(english).then(messages => {
     const temporary = {...messages}
     temporary.welcome = 'Bemvindo!'
     temporary.world = 'Mundo'

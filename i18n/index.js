@@ -20,13 +20,13 @@ module.exports = {
     }
   ],
   defaultLocale: 'en',
+  langDir: 'i18n/',
+  lazy: true,
+  seo: false,
   detectBrowserLanguage: {
     useCookie: false
   },
-  lazy: true,
   syncVuex: true,
-  seo: false,
-  langDir: 'i18n/',
   vueI18n: {
     fallbackLocale: 'en',
     silentTranslationWarn: true

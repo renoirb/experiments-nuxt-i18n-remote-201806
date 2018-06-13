@@ -11,23 +11,24 @@ module.exports = {
   plugins: [
     '~/plugins/i18n'
   ],
-  middleware: [
-    'i18n'
-  ],
+  router: {
+    middleware: 'i18n'
+  },
   axios: {
     proxy: true // Can be also an object with default options
   },
   proxy: {
-    '/hpi/translations': {
+    /* sc => Side-Car ... What's useful to Nuxt, but would be an useless API by itself. */
+    '/sc/translations': {
       target: 'https://cdn.rawgit.com/',
       pathRewrite: {
-        '^/hpi/translations': '/renoirb/7a656afd8038ccf7f47e44093bea298c/raw/'
+        '^/sc/translations': '/renoirb/7a656afd8038ccf7f47e44093bea298c/raw/'
       }
     },
-    '/dog': {
+    '/sc/dog': {
       target: 'https://dog.ceo/',
       pathRewrite: {
-        '^/dog': '/api/breeds/image/random'
+        '^/sc/dog': '/api/breeds/image/random'
       }
     }
   }
