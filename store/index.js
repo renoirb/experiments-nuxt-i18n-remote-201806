@@ -1,7 +1,6 @@
 export const state = () => ({
   count: 0,
-  dog: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTA', // Empty pixel
-  translations: {}
+  dog: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTA' // Empty pixel
 })
 
 export const mutations = {
@@ -17,9 +16,6 @@ export const mutations = {
     if (typeof dog === 'string' && dog !== '') {
       state.dog = dog
     }
-  },
-  SET_TRANSLATIONS (state, translations) {
-    state.translations = {...translations}
   }
 }
 
@@ -35,14 +31,10 @@ export const actions = {
     const { data: { message: dog } } = await this.$axios.get('/sc/dog')
     commit('SET_DOG', dog)
   },
-  async hydrateTranslation ({
-    commit
-  },
-  locale
-  ) {
-    const elsewhere = `/sc/translations/${locale}.json`
-    const translations = await this.$axios.get(elsewhere).then(recv => recv.data)
-    console.log('hydrateTranslations', translations)
-    commit('SET_TRANSLATIONS', translations)
+  nuxtServerInit ({ commit }, { req }) {
+    console.log('loading-order: store actions nuxtServerInit', {...req})
+    // if (req.session.user) {
+    //   commit('user', req.session.user)
+    // }
   }
 }

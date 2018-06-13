@@ -20,13 +20,6 @@ module.exports = {
     }
   ],
   defaultLocale: 'en',
-  langDir: 'i18n/',
-  lazy: true,
-  seo: false,
-  detectBrowserLanguage: {
-    useCookie: false
-  },
-  syncVuex: true,
   vueI18n: {
     fallbackLocale: 'en',
     silentTranslationWarn: true

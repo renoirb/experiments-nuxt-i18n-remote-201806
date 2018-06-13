@@ -1,0 +1,11 @@
+{
+  "welcome": "Bemvindo! 😊",
+  "howmany": "Quantas {what} você possui",
+  "hello": "Olá",
+  "userRequired": "Um nome de usuário é obrigatório",
+  "userPlaceholder": "Nome de usuário",
+  "pwdRequired": "Uma senha é necessária",
+  "pwdPlaceholder": "Senha",
+  "captchaRequired": "Captcha é obrigatório",
+  "captchaPlaceholder": "Captcha"
+}

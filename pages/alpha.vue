@@ -1,6 +1,10 @@
 <template>
   <div>
     <h2>Alpha</h2>
+    <p>
+      <!-- do i18n.missing sees key testingMissingKeysTextPleaseDoNotTranslate ? -->
+      {{ $t('testingMissingKeysTextPleaseDoNotTranslate') }}
+    </p>
     <nuxt-link :to="{path: '/'}">Index</nuxt-link>
     <nuxt-link :to="{path: '/bravo'}">Bravo</nuxt-link>
     <h3>Samples</h3>

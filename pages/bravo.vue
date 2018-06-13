@@ -4,10 +4,10 @@
     <nuxt-link :to="{path: '/'}">Index</nuxt-link>
     <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
     <div>
-      <h3>From Remote</h3>
+      <h3>From Remote, in {{ locale }}</h3>
       <ul>
         <li
-          v-for="key in translationKeys"
+          v-for="key in messagesKeys"
           :key="key"
         >
           <strong>{{key}}</strong>:&nbsp;<span>{{$t(key)}}</span>
@@ -18,24 +18,26 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('i18n')
 export default {
-  data () {
-    return {
-      translationKeys: []
-    }
+  computed: {
+    ...mapGetters([
+      'messagesKeys',
+      'locale'
+    ])
   },
-  async asyncData ({
-    store
-  }) {
-    const locale = 'pt'
-    await store.dispatch('hydrateTranslation', locale)
-    const translations = await store.state.translations
-    console.log('translations', translations)
-    const translationKeys = Object.keys(translations)
-
-    return {
-      translationKeys
-    }
+  beforeMount () {
+    this.$store.commit('i18n/ENABLE_MESSAGES_STORE')
+    const localeFallback = 'pt'
+    const locale = this.locale.length === 2 ? this.locale : localeFallback
+    console.log('bravo at beforeMount', locale)
+  },
+  async mounted () {
+    // Enable store i18n/messages for this view
+    const locale = this.locale
+    await this.$store.dispatch('i18n/switchLocale', locale)
+    console.log('bravo at mounted', locale)
   }
 }
 </script>
