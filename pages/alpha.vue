@@ -1,10 +1,6 @@
 <template>
   <div>
     <h2>Alpha</h2>
-    <p>
-      <!-- do i18n.missing sees key testingMissingKeysTextPleaseDoNotTranslate ? -->
-      {{ $t('testingMissingKeysTextPleaseDoNotTranslate') }}
-    </p>
     <nuxt-link :to="{path: '/'}">Index</nuxt-link>
     <nuxt-link :to="{path: '/bravo'}">Bravo</nuxt-link>
     <h3>Samples</h3>
@@ -20,6 +16,13 @@
       <p><span v-t="'iown'" />&nbsp;<strong>{{ $tc(what, count, { count }) }}</strong></p>
       <h3>Translating using v-html attribute, argument and pluralization </h3>
       <p><span v-html="$tc('apple', count, { count })" /></p>
+    </div>
+    <div>
+      <p>Also testing how <em>vue-i18n</em> handles missing keys</p>
+      <p>
+        <!-- do i18n.missing sees key testingMissingKeysTextPleaseDoNotTranslate ? -->
+        {{ $t('testingMissingKeysTextPleaseDoNotTranslate') }}
+      </p>
     </div>
   </div>
 </template>

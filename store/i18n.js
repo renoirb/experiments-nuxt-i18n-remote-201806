@@ -1,8 +1,9 @@
 import Vue from 'vue'
 
 export const state = () => ({
-  locale: '',
-  messages: false
+  locale: 'fr-CA', // #VueI18nFallbackLocaleEnglish
+  messages: false,
+  silentTranslationWarn: true
 })
 
 export const mutations = {

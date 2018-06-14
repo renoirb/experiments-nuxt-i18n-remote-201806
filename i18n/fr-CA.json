@@ -1,4 +1,5 @@
 {
+  "loadedfrom": "Cette vue a été chargée dynamiquement du coté {from}! ’Capoté hein!? 🤤",
   "welcome": "Bienvenue",
   "world": "Planète (chargé à partir de i18n/fr)",
   "car": "auto | autos",
@@ -6,5 +7,6 @@
   "ownhowmany": "Vous avez présentement",
   "add": "Ajouter",
   "cutedog": "Voici un joli pitou",
-  "iown": "Je possède"
+  "iown": "Je possède",
+  "alpha": "😊"
 }

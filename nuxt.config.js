@@ -2,7 +2,8 @@ const i18nExtensions = require('vue-i18n-extensions')
 
 module.exports = {
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   plugins: [
     '~/plugins/i18n'
@@ -36,5 +37,10 @@ module.exports = {
         t: i18nExtensions.directive
       }
     }
+  },
+  build: {
+    vendor: [
+      'vue-i18n'
+    ]
   }
 }

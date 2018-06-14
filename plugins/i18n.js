@@ -7,24 +7,7 @@ import {
 
 Vue.use(VueI18n)
 
-async function loadLanguageAsync (langCode) {
-  const locale = this.locale
-  const debugObj = {
-    locale,
-    langCode
-  }
-  console.log('loading-order: plugins/i18n loadLanguageAsync BEGIN', debugObj)
-  if (locale !== langCode) {
-    if (!this.loadedLocales().includes(langCode)) {
-      return import(/* webpackChunkName: "lang-[request]" */ `@/i18n/${langCode}`).then(msgs => {
-        this.setLocaleMessage(langCode, msgs.default)
-        return langCode
-      })
-    }
-    return Promise.resolve(langCode)
-  }
-  return Promise.resolve(langCode)
-}
+const localeToLangCode = locale => locale.split('-')[0]
 
 /**
  * See https://nuxt-community.github.io/nuxt-i18n/callbacks.html#usage
@@ -37,44 +20,70 @@ export default async function ({
   console.log('loading-order: plugins/i18n')
 
   // options comes from comes from
-  app.i18n = new VueI18n(i18n.vueI18n)
+  app.i18n = new VueI18n({
+    ...i18n.vueI18n,
+    locale: store.state.i18n.locale,
+    silentTranslationWarn: store.state.i18n.silentTranslationWarn
+  })
 
   // Maybe use vuex store, populate using same way as languages files. #TODO
   app.i18n.locales = [...i18n.locales]
 
-  app.i18n.loadLanguageAsync = loadLanguageAsync
-
   app.i18n.loadedLocales = function loadedLocalesClosure () {
-    return Object.keys(app.i18n.messages)
+    const loaded = Object.keys(this.messages)
+    console.log('loadedLocales', loaded)
+    return loaded
   }
 
-  app.i18n.isInitialized = (function isInitializedClosure () {
-    const locale = this.locale
-    const langCode = locale.split('-')[0]
-    const test = locale !== ''
-    this.loadLanguageAsync(langCode).then(langCode => {
-      console.log('loadLangCodeAsync for', langCode)
-      // This causes error [Vue warn]: The client-side rendered virtual DOM tree is not matching server-rendered content
-      // store.commit('i18n/SET_LOCALE', langCode)
-    })
-    console.log('isInitialized', test, locale, langCode)
-    return test
-  }.bind(app.i18n))()
+  app.i18n.langCode = function langCodeClosure () {
+    return localeToLangCode(this.locale)
+  }
+
+  app.i18n.loadLanguageAsync = async function loadLanguageAsync (locale) {
+    const alreadyLoaded = this.loadedLocales()
+    const debugObj = {
+      locale,
+      loadedLocales: [...alreadyLoaded]
+    }
+    console.log('loading-order: plugins/i18n loadLanguageAsync BEGIN', debugObj)
+    if (!alreadyLoaded.includes(locale)) {
+      // console.log('loading-order: plugins/i18n loadLanguageAsync NOT LOADED')
+      // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/dynamic-import-chunkname.md #TODO
+      return import(/* webpackChunkName: "messages-[request]" */ `@/i18n/${locale}`).then(async module => {
+        const messagesModule = module.default ? module.default : module
+        let messages = {}
+        if (typeof messagesModule === 'function') {
+          messages = await Promise.resolve(null).then(messagesModule)
+        } else {
+          messages = {...messagesModule}
+        }
+        console.log('loadLanguageAsync then', messages)
+        this.setLocaleMessage(locale, messages)
+        // console.log('loading-order: plugins/i18n loadLanguageAsync IMPORT HANDLING SUCCESS END', locale, {...messages})
+        return locale
+      })
+    }
+    // console.log('loading-order: plugins/i18n loadLanguageAsync ALREADY LOADED END')
+    return Promise.resolve(locale)
+  }
 
   app.i18n.onLocaleSwitch = async function onLocaleSwitcClosure (locale) {
-    console.log('loading-order: plugins/i18n onLocaleSwitch BEGIN')
     const loadedLocales = this.loadedLocales()
+    console.log('loading-order: plugins/i18n onLocaleSwitch BEGIN', loadedLocales)
     if (loadedLocales.includes(locale) === false) {
       let elsewhere = `/imagine-this-is-a-remote/${locale}`
       elsewhere += '.json' // Because for this experiment, we load a JSON file statically
 
+      const foo = this.getLocaleMessage(locale) // Trying to figure out how to merge
       const filterLocales = filterFactory(app.i18n.locales)
-      const localeDescription = filterLocales('code', locale)[0]
-      Reflect.deleteProperty(localeDescription, 'file')
+      const localeDescription = filterLocales('iso', locale)[0]
+      const langCode = localeToLangCode(locale)
       const payload = await $axios.get(elsewhere).then(recv => recv.data)
       let messages = {
         locale: {...localeDescription},
-        langCode: locale,
+        langCode,
+        charlie: '😊',
+        ...foo,
         ...payload
       }
       app.i18n.onMessagesLoaded(locale, messages)
@@ -101,7 +110,7 @@ export default async function ({
     const isTheMutationWeAreLookingFor = /SET_LOCALE$/i.test(mutation.type)
     // console.log('app.i18n.locales', app.i18n.locales)
     const filterLocales = filterFactory(app.i18n.locales)
-    const isSupportedLocale = filterLocales('code', locale).length === 1
+    const isSupportedLocale = filterLocales('iso', locale).length === 1
     if (
       isTheMutationWeAreLookingFor &&
         isSupportedLocale
@@ -110,9 +119,24 @@ export default async function ({
     }
   })
 
-  const debugObj = {
-    locale: app.i18n.locale,
-    isInitialized: app.i18n.isInitialized
-  }
-  console.log('loading-order: plugins/i18n END', debugObj)
+  /**
+   * IIFE: Immediately Invoked Function Expression, bootstrapping loading locale
+   */
+  await (async function iifeInit (a) {
+    // console.error(`-------------------------- iifeInit app.i18n.locale ${a.locale} -------------------------- `)
+    return a.loadLanguageAsync(a.locale)
+      .then(locale => {
+        console.info(`iifeInit 1/2 at loadLanguageAsync then, for locale ${locale}`)
+        // This causes error [Vue warn]: The client-side rendered virtual DOM tree is not matching server-rendered content
+        // store.commit('i18n/SET_LOCALE', locale)
+        return locale
+      })
+      .then(locale => {
+        console.info(`iifeInit 2/2 at loadLanguageAsync then, for locale ${locale}`)
+        // https://vuex.vuejs.org/guide/actions.html#dispatching-actions
+        store.dispatch('i18n/switchLocale', locale)
+
+        return locale
+      })
+  })(app.i18n)
 }

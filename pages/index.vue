@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>Index</h2>
+    <p>{{ $t('loadedfrom', { from }) }}</p>
     <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
     <nuxt-link :to="{path: '/bravo'}">Bravo</nuxt-link>
     <div>
@@ -21,13 +22,19 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      what: 'apple' // Make part of VueX to experiment about this
+      what: 'apple', // Make part of VueX to experiment about this
+      from: ''
     }
   },
   computed: mapState({
     count: state => state.count,
     dog: state => state.dog
   }),
+  asyncData() {
+    return {
+      from: process.static ? 'static' : (process.server ? 'server' : 'client')
+    }
+  },
   async fetch ({
     store
   }) {

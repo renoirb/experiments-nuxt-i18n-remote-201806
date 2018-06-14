@@ -4,24 +4,20 @@ module.exports = {
       code: 'en',
       iso: 'en-US',
       name: 'English',
-      file: 'en.js'
     },
     {
       code: 'fr',
       iso: 'fr-CA',
       name: 'Français',
-      file: 'fr.json'
     },
     {
       code: 'pt',
-      iso: 'pt-PT',
+      iso: 'pt-BR',
       name: 'Português',
-      file: 'pt.js'
-    }
+    },
   ],
-  defaultLocale: 'en',
   vueI18n: {
-    fallbackLocale: 'en',
-    silentTranslationWarn: true
-  }
+    fallbackLocale: 'en-US', // #VueI18nFallbackLocaleEnglish
+    // locale: 'en-US',     // < We will use Vuex
+  },
 }

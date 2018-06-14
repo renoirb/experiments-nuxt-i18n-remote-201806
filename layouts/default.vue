@@ -4,9 +4,8 @@
     <div>
       <button
         v-for="locale in $i18n.locales"
-        v-if="locale.code !== $i18n.locale"
-        :key="locale.code"
-        @click="switchLocale(locale.code)"
+        :key="locale.iso"
+        @click="switchLocale(locale.iso)"
       >
         {{ locale.name }}
       </button>

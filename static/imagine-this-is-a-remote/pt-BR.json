@@ -7,5 +7,6 @@
   "pwdRequired": "Uma senha é necessária",
   "pwdPlaceholder": "Senha",
   "captchaRequired": "Captcha é obrigatório",
-  "captchaPlaceholder": "Captcha"
+  "captchaPlaceholder": "Captcha",
+  "bravo": "😊"
 }
