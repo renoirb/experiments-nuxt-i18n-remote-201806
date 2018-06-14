@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import i18n from '~/i18n'
 import {
-  filterFactory
+  filterFactory,
 } from '~/utils'
 
 Vue.use(VueI18n)
@@ -15,7 +15,7 @@ const localeToLangCode = locale => locale.split('-')[0]
 export default async function ({
   $axios,
   app,
-  store
+  store,
 }) {
   console.log('loading-order: plugins/i18n')
 
@@ -23,7 +23,7 @@ export default async function ({
   app.i18n = new VueI18n({
     ...i18n.vueI18n,
     locale: store.state.i18n.locale,
-    silentTranslationWarn: store.state.i18n.silentTranslationWarn
+    silentTranslationWarn: store.state.i18n.silentTranslationWarn,
   })
 
   // Maybe use vuex store, populate using same way as languages files. #TODO
@@ -43,10 +43,10 @@ export default async function ({
     const alreadyLoaded = this.loadedLocales()
     const debugObj = {
       locale,
-      loadedLocales: [...alreadyLoaded]
+      loadedLocales: [...alreadyLoaded],
     }
     console.log('loading-order: plugins/i18n loadLanguageAsync BEGIN', debugObj)
-    if (!alreadyLoaded.includes(locale)) {
+    if (!alreadyLoaded.includes(locale) === true) { // WIP HERE — Find different way to tell if loaded.
       // console.log('loading-order: plugins/i18n loadLanguageAsync NOT LOADED')
       // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/dynamic-import-chunkname.md #TODO
       return import(/* webpackChunkName: "messages-[request]" */ `@/i18n/${locale}`).then(async module => {
@@ -55,9 +55,13 @@ export default async function ({
         if (typeof messagesModule === 'function') {
           messages = await Promise.resolve(null).then(messagesModule)
         } else {
-          messages = {...messagesModule}
+          messages = {
+            ...messagesModule,
+          }
         }
-        console.log('loadLanguageAsync then', messages)
+        console.log('loadLanguageAsync then', {
+          ...messages,
+        })
         this.setLocaleMessage(locale, messages)
         // console.log('loading-order: plugins/i18n loadLanguageAsync IMPORT HANDLING SUCCESS END', locale, {...messages})
         return locale
@@ -68,9 +72,10 @@ export default async function ({
   }
 
   app.i18n.onLocaleSwitch = async function onLocaleSwitcClosure (locale) {
+    // await this.loadLanguageAsync(locale) // WIP HERE
     const loadedLocales = this.loadedLocales()
     console.log('loading-order: plugins/i18n onLocaleSwitch BEGIN', loadedLocales)
-    if (loadedLocales.includes(locale) === false) {
+    if (loadedLocales.includes(locale) === false) { // WIP HERE — Find different way to tell if loaded.
       let elsewhere = `/imagine-this-is-a-remote/${locale}`
       elsewhere += '.json' // Because for this experiment, we load a JSON file statically
 
@@ -79,12 +84,17 @@ export default async function ({
       const localeDescription = filterLocales('iso', locale)[0]
       const langCode = localeToLangCode(locale)
       const payload = await $axios.get(elsewhere).then(recv => recv.data)
+      console.log('axios received', {
+        ...payload,
+      })
       let messages = {
-        locale: {...localeDescription},
+        locale: {
+          ...localeDescription,
+        },
         langCode,
         charlie: '😊',
         ...foo,
-        ...payload
+        ...payload,
       }
       app.i18n.onMessagesLoaded(locale, messages)
     }
@@ -98,12 +108,17 @@ export default async function ({
     this.mergeLocaleMessage(locale, messages)
     const sanityCheck = this.getLocaleMessage(locale)
     const loadedLocales = this.loadedLocales()
-    console.log('loading-order: plugins/i18n onMessagesLoaded END', loadedLocales, {...sanityCheck})
+    console.log('loading-order: plugins/i18n onMessagesLoaded END', {
+      loadedLocales,
+      sanityCheck,
+    })
   }
 
   // Subscribe to
   store.subscribe(async (mutation, state) => {
-    console.log('loading-order: plugins/i18n store.subscribe event BEGIN', {...mutation})
+    console.log('loading-order: plugins/i18n store.subscribe event BEGIN', {
+      ...mutation,
+    })
     const locale = state.i18n.locale || ''
     // e.g. mutation.type would look like 'i18n/SET_LOCALE'
     //      and we match if it ends by SET_LOCALE

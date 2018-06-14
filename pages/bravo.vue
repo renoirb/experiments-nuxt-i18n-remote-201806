@@ -18,17 +18,21 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('i18n')
+import {
+  createNamespacedHelpers,
+} from 'vuex'
+const {
+  mapGetters,
+} = createNamespacedHelpers('i18n')
 export default {
   computed: {
     ...mapGetters([
       'messagesKeys',
-      'locale'
-    ])
+      'locale',
+    ]),
   },
   beforeMount () {
-    this.$store.commit('i18n/ENABLE_MESSAGES_STORE')
+    // this.$store.commit('i18n/ENABLE_MESSAGES_STORE')
     const localeFallback = 'pt'
     const locale = this.locale.length === 2 ? this.locale : localeFallback
     console.log('bravo at beforeMount', locale)
@@ -36,8 +40,8 @@ export default {
   async mounted () {
     // Enable store i18n/messages for this view
     const locale = this.locale
-    await this.$store.dispatch('i18n/switchLocale', locale)
+    // await this.$store.dispatch('i18n/switchLocale', locale)
     console.log('bravo at mounted', locale)
-  }
+  },
 }
 </script>

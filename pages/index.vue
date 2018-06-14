@@ -18,32 +18,34 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {
+  mapState,
+} from 'vuex'
 export default {
   data () {
     return {
       what: 'apple', // Make part of VueX to experiment about this
-      from: ''
+      from: '',
     }
   },
   computed: mapState({
     count: state => state.count,
-    dog: state => state.dog
+    dog: state => state.dog,
   }),
-  asyncData() {
+  asyncData () {
     return {
-      from: process.static ? 'static' : (process.server ? 'server' : 'client')
+      from: process.static ? 'static' : (process.server ? 'server' : 'client'),
     }
   },
   async fetch ({
-    store
+    store,
   }) {
     await store.dispatch('hydrateDog')
   },
   methods: {
     async add (what) {
       await this.$store.dispatch('countPlusOne')
-    }
-  }
+    },
+  },
 }
 </script>

@@ -3,18 +3,18 @@ const i18nExtensions = require('vue-i18n-extensions')
 module.exports = {
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
   ],
   plugins: [
-    '~/plugins/i18n'
+    '~/plugins/i18n',
   ],
   router: {
     middleware: [
-      'i18n'
-    ]
+      'i18n',
+    ],
   },
   axios: {
-    proxy: true // Can be also an object with default options
+    proxy: true, // Can be also an object with default options
   },
   proxy: {
     /**
@@ -25,22 +25,26 @@ module.exports = {
     '/sc/dog': {
       target: 'https://dog.ceo/',
       pathRewrite: {
-        '^/sc/dog': '/api/breeds/image/random'
-      }
-    }
+        '^/sc/dog': '/api/breeds/image/random',
+      },
+    },
   },
   render: {
     // confiture `render`
     // see Nuxt.js docs: https://nuxtjs.org/api/configuration-render#bundleRenderer
     bundleRenderer: {
       directives: {
-        t: i18nExtensions.directive
-      }
-    }
+        t: i18nExtensions.directive,
+      },
+    },
   },
   build: {
     vendor: [
-      'vue-i18n'
-    ]
-  }
+      'vue-i18n',
+      '~/plugins/i18n',
+    ],
+    analyze: {
+      analyzerMode: 'static',
+    },
+  },
 }

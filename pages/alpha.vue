@@ -28,15 +28,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {
+  mapState,
+} from 'vuex'
 export default {
   data () {
     return {
-      what: 'apple' // Make part of VueX to experiment about this
+      what: 'apple', // Make part of VueX to experiment about this
     }
   },
   computed: mapState({
-    count: state => state.count
-  })
+    count: state => state.count,
+  }),
 }
 </script>

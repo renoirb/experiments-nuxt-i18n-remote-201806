@@ -7,7 +7,7 @@ export default async function ({
   // route,
   store,
   // redirect,
-  isHMR
+  isHMR,
 }) {
   console.log('loading-order: middleware/i18n')
   const fallbackLocale = app.i18n.fallbackLocale

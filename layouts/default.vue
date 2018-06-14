@@ -23,7 +23,7 @@ export default {
   methods: {
     async switchLocale (localeName) {
       this.$store.dispatch('i18n/switchLocale', localeName)
-    }
-  }
+    },
+  },
 }
 </script>

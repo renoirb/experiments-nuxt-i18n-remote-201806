@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
 export const state = () => ({
-  locale: 'fr-CA', // #VueI18nFallbackLocaleEnglish
+  locale: 'en-US', // #VueI18nFallbackLocaleEnglish
   messages: false,
-  silentTranslationWarn: true
+  silentTranslationWarn: true,
 })
 
 export const mutations = {
@@ -16,19 +16,19 @@ export const mutations = {
   },
   SET_MESSAGES (state, messages) {
     Vue.set(state, 'messages', messages)
-  }
+  },
 }
 
 export const getters = {
   locale: state => state.locale,
   isFillMessagesEnabled: state => state.messages !== false,
   messagesKeys: state => Object.keys(state.messages || []),
-  messages: state => state.messages
+  messages: state => state.messages,
 }
 
 export const actions = {
   async switchLocale ({
-    commit
+    commit,
   },
   locale
   ) {
@@ -37,7 +37,7 @@ export const actions = {
   },
   async fillMessages ({
     commit,
-    getters
+    getters,
   },
   messages
   ) {
@@ -46,5 +46,5 @@ export const actions = {
     if (isFillMessagesEnabled) {
       commit('SET_MESSAGES', messages)
     }
-  }
+  },
 }
