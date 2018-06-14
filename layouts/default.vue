@@ -9,6 +9,12 @@
       >
         {{ locale.name }}
       </button>
+      &nbsp;&mdash;&nbsp;
+      <button
+        @click="enableMissingStore"
+      >
+        Enable Missing Store
+      </button>
     </div>
     <hr />
     <section>
@@ -22,7 +28,10 @@
 export default {
   methods: {
     async switchLocale (localeName) {
-      this.$store.dispatch('i18n/switchLocale', localeName)
+      await this.$store.dispatch('i18n/switchLocale', localeName)
+    },
+    enableMissingStore (localeName) {
+      this.$store.commit('i18n/ENABLE_MISSING_STORE')
     },
   },
 }

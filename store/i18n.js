@@ -1,29 +1,61 @@
 import Vue from 'vue'
 
+import {
+  localeToLangCode,
+} from '~/plugins/i18n'
+
 export const state = () => ({
   locale: 'en-US', // #VueI18nFallbackLocaleEnglish
-  messages: false,
+  messages: {},
+  missing: false,
   silentTranslationWarn: true,
 })
 
 export const mutations = {
   ENABLE_MESSAGES_STORE (state) {
-    // console.log('ENABLE_MESSAGES_STORE')
     Vue.set(state, 'messages', {})
+  },
+  SET_MESSAGES (state, messages) {
+    if (state.messages !== false) {
+      Vue.set(state, 'messages', messages)
+    }
+  },
+  ENABLE_MISSING_STORE (state) {
+    Vue.set(state, 'missing', {})
+  },
+  ADD_MISSING (
+    state,
+    {
+      locale = false,
+      key = false,
+    }
+  ) {
+    if (
+      state.missing !== false &&
+      locale !== false &&
+      key !== false
+    ) {
+      if (Reflect.has(state.missing, locale) === false) {
+        Vue.set(state.missing, locale, [])
+      }
+      if (state.missing[locale].includes(key) === false) {
+        state.missing[locale].push(key)
+      }
+    }
   },
   SET_LOCALE (state, locale) {
     state.locale = locale
-  },
-  SET_MESSAGES (state, messages) {
-    Vue.set(state, 'messages', messages)
   },
 }
 
 export const getters = {
   locale: state => state.locale,
+  langCode: state => localeToLangCode(state.locale),
   isFillMessagesEnabled: state => state.messages !== false,
+  isFillMissingEnabled: state => state.messages !== false,
   messagesKeys: state => Object.keys(state.messages || []),
   messages: state => state.messages,
+  missing: state => state.missing,
 }
 
 export const actions = {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Bravo</h2>
-    <nuxt-link :to="{path: '/'}">Index</nuxt-link>
+    <nuxt-link :to="{path: '/'}">Index</nuxt-link>&nbsp;
     <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
     <div>
       <h3>From Remote, in {{ locale }}</h3>
@@ -40,8 +40,8 @@ export default {
   async mounted () {
     // Enable store i18n/messages for this view
     const locale = this.locale
-    // await this.$store.dispatch('i18n/switchLocale', locale)
-    console.log('bravo at mounted', locale)
+    await this.$store.dispatch('i18n/switchLocale', locale)
+    // console.log('bravo at mounted', locale)
   },
 }
 </script>

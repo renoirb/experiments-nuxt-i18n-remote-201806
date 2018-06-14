@@ -7,7 +7,7 @@ import {
 
 Vue.use(VueI18n)
 
-const localeToLangCode = locale => locale.split('-')[0]
+export const localeToLangCode = locale => locale.split('-')[0]
 
 /**
  * See https://nuxt-community.github.io/nuxt-i18n/callbacks.html#usage
@@ -22,6 +22,12 @@ export default async function ({
   // options comes from comes from
   app.i18n = new VueI18n({
     ...i18n.vueI18n,
+    missing: (locale, key) => {
+      store.commit('i18n/ADD_MISSING', {
+        locale,
+        key,
+      })
+    },
     locale: store.state.i18n.locale,
     silentTranslationWarn: store.state.i18n.silentTranslationWarn,
   })
@@ -72,29 +78,50 @@ export default async function ({
   }
 
   app.i18n.onLocaleSwitch = async function onLocaleSwitcClosure (locale) {
-    // await this.loadLanguageAsync(locale) // WIP HERE
-    const loadedLocales = this.loadedLocales()
-    console.log('loading-order: plugins/i18n onLocaleSwitch BEGIN', loadedLocales)
-    if (loadedLocales.includes(locale) === false) { // WIP HERE — Find different way to tell if loaded.
-      let elsewhere = `/imagine-this-is-a-remote/${locale}`
-      elsewhere += '.json' // Because for this experiment, we load a JSON file statically
+    await this.loadLanguageAsync(locale)
+    console.log('loading-order: plugins/i18n onLocaleSwitch BEGIN', locale)
+    const subjectLocaleDefinition = filterFactory(app.i18n.locales)('iso', locale)[0]
+    const hadBeenFetch = Reflect.has(subjectLocaleDefinition, 'loaded') === false
+    if (hadBeenFetch) {
+      // const params = {
+      //   lang: locale,
+      // }
+      let url = '/sc/language'
+      url += `/${locale.split('-')[0]}.json` // Or using GitHub Gist. /en.json, instead of /en-US.json
+      const headers = {
+        'Cache-Control': 'no-cache',
+        'Accept': 'application/json;charset=utf-8',
+      }
+      const request = {
+        method: 'GET',
+        url,
+        // params,
+        headers,
+      }
 
-      const foo = this.getLocaleMessage(locale) // Trying to figure out how to merge
-      const filterLocales = filterFactory(app.i18n.locales)
-      const localeDescription = filterLocales('iso', locale)[0]
+      const localeDescription = filterFactory(this.locales)('iso', locale)[0]
       const langCode = localeToLangCode(locale)
-      const payload = await $axios.get(elsewhere).then(recv => recv.data)
-      console.log('axios received', {
-        ...payload,
+      const {
+        data,
+        ...recv
+      } = await $axios.request(request)
+      console.log('received', {
+        ...data,
       })
+      const responseURL = recv.request.responseURL || url
+      Vue.set(subjectLocaleDefinition, 'loaded', responseURL)
+      // console.log('axios received', {
+      //   ...recv,
+      // })
+      const localeMessages = this.getLocaleMessage(locale)
       let messages = {
         locale: {
           ...localeDescription,
         },
         langCode,
         charlie: '😊',
-        ...foo,
-        ...payload,
+        ...localeMessages,
+        ...data,
       }
       app.i18n.onMessagesLoaded(locale, messages)
     }

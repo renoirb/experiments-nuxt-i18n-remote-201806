@@ -2,8 +2,8 @@ const i18nExtensions = require('vue-i18n-extensions')
 
 module.exports = {
   modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy',
+    '@nuxtjs/axios'
+    // No need to add @nuxtjs/proxy, axios nuxt module already loads it
   ],
   plugins: [
     '~/plugins/i18n',
@@ -28,6 +28,12 @@ module.exports = {
         '^/sc/dog': '/api/breeds/image/random',
       },
     },
+    '/sc/language': {
+      target: 'https://rawgit.com/',
+      pathRewrite: {
+        '^/sc/language/': '/renoirb/7a656afd8038ccf7f47e44093bea298c/raw/',
+      },
+    },
   },
   render: {
     // confiture `render`
@@ -43,8 +49,5 @@ module.exports = {
       'vue-i18n',
       '~/plugins/i18n',
     ],
-    analyze: {
-      analyzerMode: 'static',
-    },
   },
 }

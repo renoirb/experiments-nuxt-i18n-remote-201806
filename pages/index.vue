@@ -2,7 +2,7 @@
   <div>
     <h2>Index</h2>
     <p>{{ $t('loadedfrom', { from }) }}</p>
-    <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>
+    <nuxt-link :to="{path: '/alpha'}">Alpha</nuxt-link>&nbsp;
     <nuxt-link :to="{path: '/bravo'}">Bravo</nuxt-link>
     <div>
       <h3>Using translation formatters</h3>

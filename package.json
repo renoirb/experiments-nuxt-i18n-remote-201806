@@ -12,7 +12,8 @@
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/proxy": "^1.2.4",
     "nuxt": "^1.4",
-    "vue-i18n": "^7.8.0"
+    "vue-i18n": "^7.8.0",
+    "vue-i18n-extensions": "^0.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
@@ -22,7 +23,6 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "eslint-plugin-vue": "^4.5.0",
-    "vue-i18n-extensions": "^0.1.0"
+    "eslint-plugin-vue": "^4.5.0"
   }
 }
